@@ -35,8 +35,8 @@ def build_deck():
         ["Poffin"]*3 +
         ["NestBall"]*3 +
         ["UltraBall"]*2 +
-        ["NightStretcher"]*2 +          # Maca Noturna
-        ["CounterCatcher"]*3 +          # Pegador de Contra-ataque
+        ["NightStretcher"]*2 +          
+        ["CounterCatcher"]*3 +          
         ["Pokégear"]*2 +
         ["EarthVessel"]*1 +
         ["UnfairStamp"]*1 +
@@ -203,17 +203,21 @@ def turn_cycle(hand, deck, table, supporter_used=False):
 
     while "Poffin" in hand:
         use_poffin(hand, deck, table)
+        random.shuffle(deck)
 
     while "NestBall" in hand or "UltraBall" in hand:
         use_nest_or_ultra(hand, deck, table)
+        random.shuffle(deck)
 
     if "Artazon" in hand:
         hand.remove("Artazon")
         use_artazon(deck, table)
+        random.shuffle(deck)
 
     if "Pokégear" in hand:
         hand.remove("Pokégear")
         use_pokegear(hand, deck, table)
+        random.shuffle(deck)
 
     attach_energy(hand, table)
 
@@ -227,6 +231,7 @@ def turn_cycle(hand, deck, table, supporter_used=False):
                 deck.remove(item)
                 hand.append(item)
                 break
+        random.shuffle(deck)
         turn_cycle(hand, deck, table, supporter_used=True)
 
     elif "Lillie" in hand:
@@ -235,6 +240,7 @@ def turn_cycle(hand, deck, table, supporter_used=False):
         hand.clear()
         hand.extend(deck[:8])
         del deck[:8]
+        random.shuffle(deck)
         turn_cycle(hand, deck, table, supporter_used=True)
 
     elif "Kissera" in hand:
@@ -246,7 +252,7 @@ def turn_cycle(hand, deck, table, supporter_used=False):
 
 # ---------------- SIMULAÇÃO ----------------
 
-def simulate_turn1( iterations=1_500_000):
+def simulate_turn1( iterations):
     results = {"completo":0, "parcial":0, "incompleto":0, "auto_loss":0}
 
     for _ in range(iterations):
@@ -279,7 +285,7 @@ def simulate_turn1( iterations=1_500_000):
     return results
 
 # ---------------- EXECUÇÃO ----------------
-ITERATIONS = 1_500_000
+ITERATIONS = 150_000
 
 results = simulate_turn1(ITERATIONS)
 print_report(results, ITERATIONS, "2 Pokégear 3 Snorunt")
